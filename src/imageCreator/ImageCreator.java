@@ -1,21 +1,23 @@
 package imageCreator;
 
-import javax.swing.SwingUtilities;
+import imageCreator.window.DrawWindow;
 
-import monkMapCreator.Main;
+import javax.swing.SwingUtilities;
 
 public class ImageCreator {
 
 	
-	public ImageCreator(){
+	public ImageCreator() {
+		new DrawWindow();
+		System.out.println("all good");
 		
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 	         @Override
 	         public void run() {
-	            new Main();
+	            new ImageCreator();
 	            
 	         }
 	      });

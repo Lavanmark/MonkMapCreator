@@ -42,7 +42,7 @@ public class SaveLoad {
 	         return null;
 	      }catch(ClassNotFoundException c)
 	      {
-	         System.out.println("Employee class not found");
+	         System.out.println("MapItem class not found");
 	         c.printStackTrace();
 	         return null;
 	      }
