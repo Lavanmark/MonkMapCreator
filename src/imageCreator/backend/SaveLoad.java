@@ -32,7 +32,8 @@ public class SaveLoad {
 			System.err.println("ERROR: File was not formatted properly! Deleting file!");
 			deleteFile = true;
 		} finally {
-			scan.close();
+			if(scan != null)
+				scan.close();
 			if(deleteFile)
 				f.delete();
 		}

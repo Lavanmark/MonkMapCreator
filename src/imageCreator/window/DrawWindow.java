@@ -20,8 +20,8 @@ public class DrawWindow extends JFrame {
 	public DrawWindow() {
 		super("Draw");
 		
-		this.buildComponents();
 		this.buildMenuBar();
+		this.buildComponents();
 		
 		this.add(menuBar);
 		this.add(mainPanel);
