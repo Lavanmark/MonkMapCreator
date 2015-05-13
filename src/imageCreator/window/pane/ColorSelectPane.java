@@ -5,6 +5,7 @@ import imageCreator.backend.ColorSelectionState.ColorSelectionListener;
 import imageCreator.backend.Pixel;
 import imageCreator.backend.SaveLoad;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -17,6 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -38,7 +40,7 @@ public class ColorSelectPane extends JPanel{
 		this.setMinimumSize(new Dimension(45,200));
 		parentFrame = parent;
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setLayout(new BorderLayout());
 		
 		this.buildComponents();
 		
@@ -46,28 +48,28 @@ public class ColorSelectPane extends JPanel{
 	}
 	
 	private void buildComponents() {
-		this.add(Box.createVerticalGlue());
-		this.add(Box.createRigidArea(new Dimension(5,5)));
+		//this.add(Box.createVerticalGlue());
+		//this.add(Box.createRigidArea(new Dimension(5,5)));
 		colorArray = new ColorSelector();
-		this.add(colorArray);
-		this.add(Box.createRigidArea(new Dimension(5,5)));
+		this.add(colorArray, BorderLayout.CENTER);
+		//this.add(Box.createRigidArea(new Dimension(5,5)));
 		pickColor = new JButton("Add Colors");
-		this.add(pickColor);
-		this.add(Box.createRigidArea(new Dimension(5,5)));
-		this.add(Box.createVerticalGlue());
+		this.add(pickColor, BorderLayout.SOUTH);
+		//this.add(Box.createRigidArea(new Dimension(5,5)));
+		//this.add(Box.createVerticalGlue());
 		
 	}
 
 	
-	private class ColorSelector extends JComponent implements ColorSelectionListener{
+	private class ColorSelector extends JPanel implements ColorSelectionListener{
 		private Pixel[][] colors;
 		private Rectangle[][] selector;
 		
 		
 		public ColorSelector() {
 			super();
-			//this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-			setMinimumSize(new Dimension(25,110));
+			setMinimumSize(new Dimension(700,700));
+			this.set
 			
 			Pixel[][] temp = SaveLoad.loadColorSelections();
 			if(temp != null)
@@ -93,14 +95,14 @@ public class ColorSelectPane extends JPanel{
 		
 		private void initializeRect() {
 			selector = new Rectangle[2][10];
-			int x = 0, y = 0;
+			int x = 1, y = 1;
 			for(int i = 0; i < selector.length; i++){
 				for(int o = 0; o < selector[i].length; o++){
-					selector[i][o] = new Rectangle(x, y, 10, 10);
-					y += 11;
+					selector[i][o] = new Rectangle(x, y, 30, 30);
+					y += 30;
 				}
-				x += 11;
-				y = 0;
+				x += 30;
+				y = 1;
 			}
 		}
 		
@@ -122,9 +124,8 @@ public class ColorSelectPane extends JPanel{
 			super.paintComponent(g);
 			for(int i = 0; i < selector.length; i++){
 				for(int o = 0; o < selector[i].length; o++){
-					System.out.println("yes");
 					g.setColor(Color.BLACK);
-					g.drawRect(selector[i][o].x, selector[i][o].y, selector[i][o].width, selector[i][o].height);
+					g.drawRect(selector[i][o].x-1, selector[i][o].y-1, selector[i][o].width+1, selector[i][o].height+1);
 					g.setColor(colors[i][o].getColor());
 					g.fillRect(selector[i][o].x, selector[i][o].y, selector[i][o].width, selector[i][o].height);
 				}

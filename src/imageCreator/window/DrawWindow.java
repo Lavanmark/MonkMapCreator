@@ -4,15 +4,17 @@ import imageCreator.window.pane.ColorSelectPane;
 import imageCreator.window.pane.DrawPane;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 @SuppressWarnings("serial")
 public class DrawWindow extends JFrame {
 	private JMenuBar menuBar;
-	private JPanel mainPanel;
+	private JSplitPane mainPanel;
 	private DrawPane drawPane;
 	private ColorSelectPane colorSelectPane;
 	
@@ -26,7 +28,10 @@ public class DrawWindow extends JFrame {
 		this.add(menuBar);
 		this.add(mainPanel);
 		
+		this.setSize(500,500);
+		//this.setMinimumSize(new Dimension(500,500));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		this.pack();
 		this.setVisible(true);
 	}
@@ -36,15 +41,13 @@ public class DrawWindow extends JFrame {
 	}
 	
 	private void buildComponents() {
-		mainPanel = new JPanel(new BorderLayout());
+		
 		
 		colorSelectPane = new ColorSelectPane(this);
 		
 		
 		drawPane = new DrawPane();
 		
-		mainPanel.add(colorSelectPane, BorderLayout.WEST);
-		mainPanel.add(drawPane, BorderLayout.CENTER);
-		
+		mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, colorSelectPane, drawPane);
 	}
 }
