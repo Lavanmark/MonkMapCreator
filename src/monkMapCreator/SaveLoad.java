@@ -4,10 +4,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class SaveLoad {
+	
+	private Main main;
+	
+	public SaveLoad(Main m){
+		main = m;
+	}
 
 	public void save(String fname, MapItem mi){
 		try
@@ -49,24 +56,55 @@ public class SaveLoad {
 	      return m;
 	}
 	
+	public MapItem importMap(String fname){
+		int[] mint = new int[1200];
+		int[] tree = new int[1200];
+		FileInputStream fileIn = null;
+		ObjectInputStream finstrm = null;
+		boolean doTrees = false;
+		try {
+			fileIn = new FileInputStream(System.getProperty("user.home") + "/maps/"  + fname + ".txt");
+			
+			finstrm = new ObjectInputStream(fileIn);
+			mint = (int[]) finstrm.readObject();
+			File f = new File(System.getProperty("user.home")+"/maps/" + fname +"tree.txt");
+			if(f.exists()){
+				fileIn = new FileInputStream(f);
+				finstrm = new ObjectInputStream(fileIn);
+				tree = (int[]) finstrm.readObject();
+				doTrees = true;
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		MapItem mi = new MapItem(main.TILE_BLANK);
+		for(int i = 0; i < mint.length; i++){
+			mi.setTile(i, main.tileArray[mint[i]]);
+			if(doTrees){
+				mi.setTile(i, main.tileArray[tree[i]]);
+				System.out.println(tree[i]);
+			}
+		}
+		return mi;
+	}
 	
 	public void exportPT(String fname, MapItem mi, boolean outside){
 		
 		
 		if(outside){
-			int[] ao = new int[1200];
-			int[] tao = new int[1200];
+			TileXY[] ao = new TileXY[1200];
+			TileXY[] tao = new TileXY[1200];
 			for(int i = 0; i < 1200; i++){
-				ao[i] = mi.mapArray[i].getId();
-				tao[i] = mi.mapTreeArray[i].getId();
+				ao[i] = new TileXY(mi.mapArray[i].x,mi.mapArray[i].y);
+				tao[i] = new TileXY(mi.mapTreeArray[i].x,mi.mapTreeArray[i].y);
 			}
 			try{
-		         FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + ".txt");
+		         FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + ".mmc");
 		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		         out.writeObject(ao);
 		         out.close();
 		         fileOut.close();
-		         fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + "tree.txt");
+		         fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + "tree.mmc");
 		         out = new ObjectOutputStream(fileOut);
 		         out.writeObject(tao);
 		         out.close();
@@ -80,7 +118,7 @@ public class SaveLoad {
 				ao[i] = mi.mapArray[i].getId();
 			}
 			try{
-		         FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + ".txt");
+		         FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + ".mmc");
 		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		         out.writeObject(ao);
 		         out.close();

@@ -33,7 +33,7 @@ public class MapItem implements java.io.Serializable{
 	public void setTile(int loc, Tile tile){
 		if(tile.getId() > 58 && tile.getId() < 68){
 			mapTreeArray[loc] = tile;
-		}else if(tile.getId() == 58 && mapTreeArray[loc].getId() != 58){
+		}else if(tile.getId() == 58){ //&& mapTreeArray[loc].getId() != 58
 			mapTreeArray[loc] = tile;
 		}else{
 			mapArray[loc] = tile;
@@ -52,6 +52,7 @@ public class MapItem implements java.io.Serializable{
 	public BufferedImage getImage(int x, int y,SheetGrabber sg1){
 		return sg1.grabSprite(x, y, 20, 20);
 	}
+	
 	public void drawTiles(Graphics g,SheetGrabber sg){
 		for(int i = 0; i < 1200; i++){
 			if(i < 1200){
@@ -59,6 +60,7 @@ public class MapItem implements java.io.Serializable{
 			}
 		}
 	}
+	
 	public void drawTrees(Graphics g,SheetGrabber sg){
 		for(int i = 0; i < 1200; i++){
 			if(i < 1200){

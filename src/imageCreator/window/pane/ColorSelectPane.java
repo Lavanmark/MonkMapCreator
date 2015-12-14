@@ -69,7 +69,7 @@ public class ColorSelectPane extends JPanel{
 		public ColorSelector() {
 			super();
 			setMinimumSize(new Dimension(700,700));
-			this.set
+			//this.set
 			
 			Pixel[][] temp = SaveLoad.loadColorSelections();
 			if(temp != null)

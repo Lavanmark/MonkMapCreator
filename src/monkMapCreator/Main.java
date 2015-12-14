@@ -37,7 +37,7 @@ public class Main extends JFrame{
 	
 	static final int CANVAS_WIDTH = 800;    // width and height of the game screen
 	static final int CANVAS_HEIGHT = 800;
-	static final String VERSION = "v0.2.2";
+	static final String VERSION = "v0.2.5";
 	
 	private GameCanvas canvas;
 	private MenuListener ml;
@@ -96,7 +96,7 @@ public class Main extends JFrame{
 		mode = Mode.SINGLE; 
 		canvas = new GameCanvas();
 		ml = new MenuListener();
-		sl = new SaveLoad();
+		sl = new SaveLoad(this);
 		dl = new DrawListener();
 		bl = new ButtonListener();
 		setSquares();
@@ -318,6 +318,14 @@ public class Main extends JFrame{
 		menuItem.addActionListener(ml);
 		menu.add(menuItem);
 		
+		menuItem = new JMenuItem("Import", KeyEvent.VK_I);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription(
+		        "Import Exported Files");
+		menuItem.setActionCommand("Import");
+		menuItem.addActionListener(ml);
+		menu.add(menuItem);
+		
 		submenu = new JMenu("Export");
 		submenu.setMnemonic(KeyEvent.VK_E);
 
@@ -395,7 +403,7 @@ public class Main extends JFrame{
 	}
 	
 	public void drawTiles(Graphics2D g2d){
-		map.drawTiles(g2d,sg1);
+		map.drawTiles(g2d, sg1);
 		map.drawTrees(g2d, sg1);
 		g2d.setColor(Color.BLACK);
 		int x = 0;
@@ -513,6 +521,34 @@ public class Main extends JFrame{
 					return;
 				}
 				map = sl.load(fname);
+				changesMade = false;
+				repaint();
+			}else if("Import".equals(e.getActionCommand())){
+				String fname = "map";
+				String s ="";
+				if(changesMade){
+					int n = JOptionPane.showConfirmDialog(canvas,
+						    "You Haven't Saved Changes! Continue Anyway?",
+						    "WARNING",
+						    JOptionPane.YES_NO_OPTION);
+					if(n == 1)
+						return;
+				}
+				while(s.length() < 1){
+					s = (String)JOptionPane.showInputDialog(
+	                    "Enter name of file to load",fname);
+					if(s == null) return;
+					fname = s;
+				}
+				File o = new File(System.getProperty("user.home")+"/maps/"+fname+".txt");
+				if(!o.exists()){
+					JOptionPane.showMessageDialog(canvas,
+						    "File Does Not Exist in:\n"+System.getProperty("user.home")+"/maps/",
+						    "WARNING",
+						    JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				map = sl.importMap(fname);
 				changesMade = false;
 				repaint();
 			}else if("Outside".equals(e.getActionCommand())){
