@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -27,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import resources.ResourceLoader;
 
@@ -37,7 +39,7 @@ public class Main extends JFrame{
 	
 	static final int CANVAS_WIDTH = 800;    // width and height of the game screen
 	static final int CANVAS_HEIGHT = 800;
-	static final String VERSION = "v0.2.5";
+	static final String VERSION = "v0.2.7";
 	
 	private GameCanvas canvas;
 	private MenuListener ml;
@@ -471,6 +473,20 @@ public class Main extends JFrame{
 		}
 		
 	}
+	
+	private File fileSelection(String startLoc, FileNameExtensionFilter filter){
+		JFileChooser fc = new JFileChooser();
+		
+		if(filter != null)
+			fc.setFileFilter(filter);
+		fc.setCurrentDirectory(new File(startLoc));
+		fc.setMultiSelectionEnabled(false);
+		
+		if(JFileChooser.APPROVE_OPTION == fc.showOpenDialog(this))
+			return fc.getSelectedFile();
+		else return null;
+	}
+	
 	class MenuListener implements ActionListener{
 
 		@Override
@@ -496,8 +512,6 @@ public class Main extends JFrame{
 				sl.save(fname,map);
 				changesMade = false;
 			}else if("Load".equals(e.getActionCommand())){
-				String fname = "map";
-				String s ="";
 				if(changesMade){
 					int n = JOptionPane.showConfirmDialog(canvas,
 						    "You Haven't Saved Changes! Continue Anyway?",
@@ -506,26 +520,15 @@ public class Main extends JFrame{
 					if(n == 1)
 						return;
 				}
-				while(s.length() < 1){
-					s = (String)JOptionPane.showInputDialog(
-	                    "Enter name of file to load",fname);
-					if(s == null) return;
-					fname = s;
-				}
-				File o = new File(System.getProperty("user.home")+"/maps/"+fname+".tdmc");
-				if(!o.exists()){
-					JOptionPane.showMessageDialog(canvas,
-						    "File Does Not Exist in:\n"+System.getProperty("user.home")+"/maps/",
-						    "WARNING",
-						    JOptionPane.WARNING_MESSAGE);
+				File f = fileSelection(System.getProperty("user.home")+"/maps/",
+						new FileNameExtensionFilter("TDMC", "tdmc"));
+				MapItem m = sl.load(f);
+				if(m == null)
 					return;
-				}
-				map = sl.load(fname);
+				map = m;
 				changesMade = false;
 				repaint();
 			}else if("Import".equals(e.getActionCommand())){
-				String fname = "map";
-				String s ="";
 				if(changesMade){
 					int n = JOptionPane.showConfirmDialog(canvas,
 						    "You Haven't Saved Changes! Continue Anyway?",
@@ -534,21 +537,13 @@ public class Main extends JFrame{
 					if(n == 1)
 						return;
 				}
-				while(s.length() < 1){
-					s = (String)JOptionPane.showInputDialog(
-	                    "Enter name of file to load",fname);
-					if(s == null) return;
-					fname = s;
-				}
-				File o = new File(System.getProperty("user.home")+"/maps/"+fname+".txt");
-				if(!o.exists()){
-					JOptionPane.showMessageDialog(canvas,
-						    "File Does Not Exist in:\n"+System.getProperty("user.home")+"/maps/",
-						    "WARNING",
-						    JOptionPane.WARNING_MESSAGE);
+				//TODO replace file selection
+				File f = fileSelection(System.getProperty("user.home")+"/maps/", 
+						new FileNameExtensionFilter("Text files only", "txt"));
+				MapItem m = sl.importMap(f);
+				if(m == null)
 					return;
-				}
-				map = sl.importMap(fname);
+				map = m;
 				changesMade = false;
 				repaint();
 			}else if("Outside".equals(e.getActionCommand())){

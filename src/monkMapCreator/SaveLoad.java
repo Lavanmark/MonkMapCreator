@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -33,41 +32,45 @@ public class SaveLoad {
 	      }
 	}
 	
-	public MapItem load(String fname){
+	public MapItem load(File f){
 		MapItem m = null;
-	      try
-	      {
-	         FileInputStream fileIn = new FileInputStream(System.getProperty("user.home") + "/maps/"  + fname + ".tdmc");
-	         ObjectInputStream in = new ObjectInputStream(fileIn);
-	         m = (MapItem) in.readObject();
-	         in.close();
-	         fileIn.close();
-	         System.out.println("Loaded");
-	      }catch(IOException i)
-	      {
-	         i.printStackTrace();
-	         return null;
-	      }catch(ClassNotFoundException c)
-	      {
-	         System.out.println("MapItem class not found");
-	         c.printStackTrace();
-	         return null;
-	      }
-	      return m;
+		try{
+			if(f == null)
+				return null;
+			if(!f.getName().contains(".tdmc"))
+				return null;
+	    	FileInputStream fileIn = new FileInputStream(f);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			m = (MapItem) in.readObject();
+			in.close();
+			fileIn.close();
+			System.out.println("Loaded");
+		}catch(IOException i){
+	        i.printStackTrace();
+	        return null;
+	    }catch(ClassNotFoundException c){
+	        System.out.println("MapItem class not found");
+	        c.printStackTrace();
+	        return null;
+	    }
+		return m;
 	}
 	
-	public MapItem importMap(String fname){
+	public MapItem importMap(File f){
 		int[] mint = new int[1200];
 		int[] tree = new int[1200];
 		FileInputStream fileIn = null;
 		ObjectInputStream finstrm = null;
 		boolean doTrees = false;
 		try {
-			fileIn = new FileInputStream(System.getProperty("user.home") + "/maps/"  + fname + ".txt");
+			if(!f.getName().contains(".txt"))
+				return null;
+			fileIn = new FileInputStream(f);
 			
 			finstrm = new ObjectInputStream(fileIn);
 			mint = (int[]) finstrm.readObject();
-			File f = new File(System.getProperty("user.home")+"/maps/" + fname +"tree.txt");
+			f = new File(f.getCanonicalPath().replace(".txt", "tree.txt"));
+			System.out.println(f.getCanonicalPath());
 			if(f.exists()){
 				fileIn = new FileInputStream(f);
 				finstrm = new ObjectInputStream(fileIn);
@@ -80,10 +83,8 @@ public class SaveLoad {
 		MapItem mi = new MapItem(main.TILE_BLANK);
 		for(int i = 0; i < mint.length; i++){
 			mi.setTile(i, main.tileArray[mint[i]]);
-			if(doTrees){
+			if(doTrees)
 				mi.setTile(i, main.tileArray[tree[i]]);
-				System.out.println(tree[i]);
-			}
 		}
 		return mi;
 	}

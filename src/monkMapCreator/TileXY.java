@@ -2,7 +2,8 @@ package monkMapCreator;
 
 import java.io.Serializable;
 
-public class TileXY implements Serializable{
+@SuppressWarnings("rawtypes")
+public class TileXY implements Serializable, Comparable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -35,5 +36,23 @@ public class TileXY implements Serializable{
 		if (y != other.y)
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		if(o == this)
+			return 0;
+		TileXY other = (TileXY)o;
+		if(this.y == other.y){
+			if(this.x == other.x)
+				return 0;
+			if(this.x > other.x)
+				return 1;
+			else
+				return -1;
+		}
+		if(this.y > other.y)
+			return 1;
+		return -1;
 	}
 }
