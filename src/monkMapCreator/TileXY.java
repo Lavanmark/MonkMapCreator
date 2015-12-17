@@ -1,13 +1,9 @@
 package monkMapCreator;
 
-import java.io.Serializable;
-
 @SuppressWarnings("rawtypes")
-public class TileXY implements Serializable, Comparable{
-	
-	private static final long serialVersionUID = 1L;
-	
-	int x,y;
+public class TileXY implements Comparable{
+		
+	public int x,y;
 	
 	public TileXY(int x, int y){
 		this.x = x;

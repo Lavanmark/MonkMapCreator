@@ -102,26 +102,35 @@ public class SaveLoad {
 			try{
 		         FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + ".mmc");
 		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-		         out.writeObject(ao);
+		         for(int i = 0; i < ao.length; i++){
+		        	 out.writeInt(ao[i].x);
+		        	 out.writeInt(ao[i].y);
+		         }
 		         out.close();
 		         fileOut.close();
 		         fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + "tree.mmc");
 		         out = new ObjectOutputStream(fileOut);
-		         out.writeObject(tao);
+		         for(int i = 0; i < tao.length; i++){
+		        	 out.writeInt(tao[i].x);
+		        	 out.writeInt(tao[i].y);
+		         }
 		         out.close();
 		         fileOut.close();
 		      }catch(IOException e){
 		          e.printStackTrace();
 		      }
 		}else{
-			int[] ao = new int[1200];
+			TileXY[] ao = new TileXY[1200];
 			for(int i = 0; i < 1200; i++){
-				ao[i] = mi.mapArray[i].getId();
+				ao[i] = new TileXY(mi.mapArray[i].x, mi.mapArray[i].y);
 			}
 			try{
 		         FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + ".mmc");
 		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-		         out.writeObject(ao);
+		         for(int i = 0; i < ao.length; i++){
+		        	 out.writeInt(ao[i].x);
+		        	 out.writeInt(ao[i].y);
+		         }
 		         out.close();
 		         fileOut.close();
 		      }catch(IOException e){

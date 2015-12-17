@@ -33,6 +33,8 @@ public class Tile implements java.io.Serializable{
 		this.door = door;
 		this.sign = sign;
 		this.signMsg = "";
+		this.x=x;
+		this.y=y;
 		this.setImage(x, y,sg);
 		id = nextId++;
 	}
