@@ -2,7 +2,6 @@ package monkMapCreator;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 public class MapItem implements java.io.Serializable{
 
@@ -49,14 +48,10 @@ public class MapItem implements java.io.Serializable{
 		
 	}
 	
-	public BufferedImage getImage(int x, int y,SheetGrabber sg1){
-		return sg1.grabSprite(x, y, 20, 20);
-	}
-	
 	public void drawTiles(Graphics g,SheetGrabber sg){
 		for(int i = 0; i < 1200; i++){
 			if(i < 1200){
-				g.drawImage(getImage(mapArray[i].x,mapArray[i].y, sg), blocks[i].x, blocks[i].y, null);
+				g.drawImage(mapArray[i].getImage(), blocks[i].x, blocks[i].y, null);
 			}
 		}
 	}
@@ -64,7 +59,7 @@ public class MapItem implements java.io.Serializable{
 	public void drawTrees(Graphics g,SheetGrabber sg){
 		for(int i = 0; i < 1200; i++){
 			if(i < 1200){
-				g.drawImage(getImage(mapTreeArray[i].x,mapTreeArray[i].y, sg), blocks[i].x, blocks[i].y, null);
+				g.drawImage(mapArray[i].getImage(), blocks[i].x, blocks[i].y, null);
 			}
 		}
 	}

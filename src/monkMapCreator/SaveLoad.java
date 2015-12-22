@@ -82,9 +82,14 @@ public class SaveLoad {
 		}
 		MapItem mi = new MapItem(main.TILE_BLANK);
 		for(int i = 0; i < mint.length; i++){
-			mi.setTile(i, main.tileArray[mint[i]]);
+			for(TileXY txy : main.tileMap.keySet())
+				if(main.tileMap.get(txy).getId() == mint[i])
+					mi.setTile(i, main.tileMap.get(txy));
+			
 			if(doTrees)
-				mi.setTile(i, main.tileArray[tree[i]]);
+				for(TileXY txy : main.tileMap.keySet())
+					if(main.tileMap.get(txy).getId() == tree[i])
+						mi.setTile(i, main.tileMap.get(txy));
 		}
 		return mi;
 	}
@@ -96,8 +101,8 @@ public class SaveLoad {
 			TileXY[] ao = new TileXY[1200];
 			TileXY[] tao = new TileXY[1200];
 			for(int i = 0; i < 1200; i++){
-				ao[i] = new TileXY(mi.mapArray[i].x,mi.mapArray[i].y);
-				tao[i] = new TileXY(mi.mapTreeArray[i].x,mi.mapTreeArray[i].y);
+				ao[i] = new TileXY(mi.mapArray[i].getImgX(),mi.mapArray[i].getImgY());
+				tao[i] = new TileXY(mi.mapTreeArray[i].getImgX(),mi.mapTreeArray[i].getImgY());
 			}
 			try{
 		         FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + ".mmc");
@@ -122,7 +127,7 @@ public class SaveLoad {
 		}else{
 			TileXY[] ao = new TileXY[1200];
 			for(int i = 0; i < 1200; i++){
-				ao[i] = new TileXY(mi.mapArray[i].x, mi.mapArray[i].y);
+				ao[i] = new TileXY(mi.mapArray[i].getImgX(), mi.mapArray[i].getImgY());
 			}
 			try{
 		         FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/maps/" + fname + ".mmc");

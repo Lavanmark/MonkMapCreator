@@ -32,7 +32,7 @@ public class DrawWindow extends JFrame {
 		//this.setMinimumSize(new Dimension(500,500));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-		this.pack();
+//		this.pack();
 		this.setVisible(true);
 	}
 	
